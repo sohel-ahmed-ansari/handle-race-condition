@@ -9,7 +9,9 @@
     }
     else if (typeof exports === 'object') {
         //Babel
-        module.exports = factory();
+        module.exports = function () {
+            return factory();
+        }
     }
     else {
         window.handleRaceCondition = factory();
@@ -27,7 +29,7 @@
             }
             return result;
         }
-        return ((...args) => {
+        return (function (...args) {
             if (!lastPromise) {
                 lastPromise = raceConditionFunction(...args)
                     .then(handler.bind(lastPromise))
