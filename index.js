@@ -5,13 +5,12 @@
     "use strict";
     if (typeof define === 'function' && define.amd) {
         //AMD
-        define(factory());
+        define([], function () {
+            return factory();
+        });
     }
     else if (typeof exports === 'object') {
-        //Babel
-        module.exports = function () {
-            return factory();
-        }
+        module.exports = factory();
     }
     else {
         window.handleRaceCondition = factory();
