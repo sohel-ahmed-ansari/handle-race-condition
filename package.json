@@ -1,6 +1,6 @@
 {
   "name": "handle-race-condition",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Module that returns a function that resolves promises in the same order that it was called.",
   "main": "index.js",
   "scripts": {
