@@ -21,30 +21,36 @@
      * @returns {Function} An sync function that returns a promise and can be called any number of times, but will always resolve in the order of which it was called.
      */
     return function (raceConditionFunction) {
-        let lastPromise;
-        function handler(result) {
+        var lastPromise;
+        var onSuccess = function (result) {
             if (lastPromise === this) {
                 lastPromise = null;
             }
             return result;
         }
+        var onError = function (err) {
+            if (lastPromise === this) {
+                lastPromise = null;
+            }
+            throw err;
+        }
         return (function (...args) {
             if (!lastPromise) {
                 lastPromise = raceConditionFunction(...args)
-                    .then(handler.bind(lastPromise))
-                    .catch(handler.bind(lastPromise));
+                    .then(onSuccess.bind(lastPromise))
+                    .catch(onError.bind(lastPromise));
                 return lastPromise;
             } else {
                 lastPromise = lastPromise
                     .then((function () {
                         return raceConditionFunction(...args)
-                            .then(handler.bind(this))
-                            .catch(handler.bind(this));
+                            .then(onSuccess.bind(this))
+                            .catch(onError.bind(this));
                     }).bind(lastPromise))
                     .catch((function () {
                         return raceConditionFunction(...args)
-                            .then(handler.bind(this))
-                            .catch(handler.bind(this));
+                            .then(onSuccess.bind(this))
+                            .catch(onError.bind(this));
                     }).bind(lastPromise));
                 return lastPromise;
             }
