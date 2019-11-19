@@ -2,10 +2,14 @@
   "name": "handle-race-condition",
   "version": "1.0.5",
   "description": "Module that returns a function that resolves promises in the same order that it was called.",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel src -d lib"
   },
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sohel-ahmed-ansari/handle-race-condition.git"
@@ -24,5 +28,10 @@
     "bluebird"
   ],
   "author": "Sohel",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1"
+  }
 }
