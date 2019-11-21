@@ -1,5 +1,5 @@
 # handle-race-condition
-Module that returns a function that resolves promises in the same order that it was called. 
+Module that accepts an async function, and returns an async function that can be called any number of times, but will always resolve/reject with result of the latest call.
 
  - Super simple to use
  - No dependencies on any other library.
@@ -7,7 +7,7 @@ Module that returns a function that resolves promises in the same order that it 
  - Supports AMD
 
 ## Race condition
-There are times when you call an async function multiple times but the ouput may not come in the same order as it was called.
+There are times when you call an async function multiple times but the ouput may not come in the same order as it was called, i.e, the first call can be resolved after the second call.
 This is called race condition and you can solve it using this simple module.
 
 ## How to install
@@ -36,7 +36,7 @@ someAsyncFunction(500, 1).then((order) => { console.log(order) });
 someAsyncFunction(200, 2).then((order) => { console.log(order) });
 someAsyncFunction(50, 3).then((order) => { console.log(order) });
 someAsyncFunction(400, 4).then((order) => { console.log(order) });
-someAsyncFunction(600, 5).then((order) => { console.log(order) });
+someAsyncFunction(100, 5).then((order) => { console.log(order) });
 ```
 
 As you can see the output below is not in the same order as it was called:
@@ -66,14 +66,14 @@ getSyncedResponse(500, 1).then((order) => { console.log(order) });
 getSyncedResponse(200, 2).then((order) => { console.log(order) });
 getSyncedResponse(50, 3).then((order) => { console.log(order) });
 getSyncedResponse(400, 4).then((order) => { console.log(order) });
-getSyncedResponse(600, 5).then((order) => { console.log(order) });
+getSyncedResponse(100, 5).then((order) => { console.log(order) });
 ```
-You pass the desired async function to `handleRaceCondition()` and it will return another function which when called multiple times will always resolve in the same order.
-The output as you can see now, is in the order of when it was called.
+You pass the desired async function to `handleRaceCondition()` and it will return another async function which when called multiple times will always resolve for the last call.
+The output, as you can see now, is resolved when the last call is resolved.
 ```
-1
-2
-3
-4
+5
+5
+5
+5
 5
 ```
