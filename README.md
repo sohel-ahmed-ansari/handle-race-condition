@@ -1,5 +1,5 @@
 # handle-race-condition
-Module that accepts an async function, and returns an async function that can be called any number of times, but will always resolve/reject with result of the latest call.
+Module that accepts an async function, and returns an async function that can be called any number of times in parallel, but will always resolve/reject with result of the latest call.
 
  - Super simple to use
  - No dependencies on any other library.
@@ -52,21 +52,21 @@ Now lets use our module:
 ```javascript
 import handleRaceCondition from 'handleRaceCondition';
 
-const someAsyncFunction = (time, order) => {
+const someAsyncFunction = (time, result) => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(order);
+            resolve(result);
         }, time);
     });
 };
 
-const getSyncedResponse = handleRaceCondition(someAsyncFunction);
+const getResult = handleRaceCondition(someAsyncFunction);
 
-getSyncedResponse(500, 1).then((order) => { console.log(order) });
-getSyncedResponse(200, 2).then((order) => { console.log(order) });
-getSyncedResponse(50, 3).then((order) => { console.log(order) });
-getSyncedResponse(400, 4).then((order) => { console.log(order) });
-getSyncedResponse(100, 5).then((order) => { console.log(order) });
+getResult(500, 1).then((result) => { console.log(result) });
+getResult(200, 2).then((result) => { console.log(result) });
+getResult(50, 3).then((result) => { console.log(result) });
+getResult(400, 4).then((result) => { console.log(result) });
+getResult(100, 5).then((result) => { console.log(result) });
 ```
 You pass the desired async function to `handleRaceCondition()` and it will return another async function which when called multiple times will always resolve for the last call.
 The output, as you can see now, is resolved when the last call is resolved.

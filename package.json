@@ -4,7 +4,7 @@
   "description": "Module that returns a function that resolves promises in the same order that it was called.",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "./node_modules/.bin/babel src -d lib"
   },
   "files": [
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
-    "@babel/preset-env": "^7.7.1"
+    "@babel/preset-env": "^7.7.1",
+    "jest": "^24.9.0"
   }
 }

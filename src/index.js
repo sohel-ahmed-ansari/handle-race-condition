@@ -1,5 +1,5 @@
 /**
- * Module that returns a function that resolves promises in the same order that it was called.
+ * Module that accepts an async function, and returns an async function that can be called any number of times in parallel, but will always resolve/reject with result of the latest call.
  */
 (function (factory) {
     "use strict";
@@ -22,29 +22,27 @@
      */
     return (raceConditionFunction) => {
         let latestPromise = null;
-        const arrResolve = [];
-        const arrReject = [];
+        let arrResolve = [];
+        let arrReject = [];
         return ((...args) => {
             latestPromise = raceConditionFunction(...args);
             return new Promise((resolve, reject) => {
+                arrResolve.push(resolve);
+                arrReject.push(reject);
                 latestPromise.then(((lp) => {
                     return (result) => {
                         if (lp === latestPromise) {
-                            arrResolve.forEach(r => r());
-                            resolve(result);
-                        } else {
-                            arrResolve.push(resolve);
-                            arrReject.push(reject);
+                            arrResolve.forEach(r => r(result));
+                            arrResolve = [];
+                            arrReject = [];
                         }
                     }
                 })(latestPromise)).catch(((lp) => {
                     return (err) => {
                         if (lp === latestPromise) {
-                            arrReject.forEach(r => r());
-                            reject(err);
-                        } else {
-                            arrResolve.push(resolve);
-                            arrReject.push(reject);
+                            arrReject.forEach(r => r(err));
+                            arrResolve = [];
+                            arrReject = [];
                         }
                     }
                 })(latestPromise));
