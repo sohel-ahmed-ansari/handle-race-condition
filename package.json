@@ -1,7 +1,7 @@
 {
   "name": "handle-race-condition",
   "version": "3.0.1",
-  "description": "Module that returns a function that resolves promises in the same order that it was called.",
+  "description": "Module that solves race condition problem with async calls",
   "main": "./lib/index.js",
   "scripts": {
     "test": "jest",
